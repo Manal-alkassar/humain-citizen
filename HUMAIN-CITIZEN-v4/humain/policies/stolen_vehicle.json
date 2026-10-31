@@ -1,0 +1,150 @@
+{
+  "_meta": {
+    "file": "stolen_vehicle.json",
+    "notice": "ILLUSTRATIVE MOCK POLICIES for the hackathon prototype. They are NOT official Saudi government requirements. In production this layer is populated from authoritative, versioned service catalogues owned by each agency.",
+    "kb_version": "2026.10-hackathon"
+  },
+  "policies": [
+    {
+      "id": "POL-MOI-VEH-THEFT",
+      "intent": "report_stolen_vehicle",
+      "title": {
+        "en": "Report a stolen vehicle",
+        "ar": "الإبلاغ عن سرقة مركبة"
+      },
+      "authority": "Police / Vehicle registry (mock)",
+      "versions": [
+        {
+          "version": "2.1",
+          "effective": "2026-01-01",
+          "source_id": "KB/MOI/VEH-THEFT/2.1",
+          "summary": "The registered owner may report a stolen vehicle. Report is filed with police, the vehicle is flagged in the registry (transfer blocked, checkpoint alert) and the insurer may be notified with consent.",
+          "risk": "high",
+          "autonomy": "approved_execution",
+          "step_up_auth": true,
+          "eligibility": [
+            "identity_verified",
+            "owns_selected_vehicle",
+            "vehicle_not_already_reported"
+          ],
+          "slots": [
+            {
+              "name": "vehicle",
+              "type": "owned_vehicle",
+              "source": "context_select",
+              "required": true
+            },
+            {
+              "name": "incident_time",
+              "type": "time_expr",
+              "source": "user",
+              "required": true
+            },
+            {
+              "name": "incident_location",
+              "type": "location",
+              "source": "user",
+              "required": true
+            }
+          ],
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "police.file_theft_report",
+              "label": {
+                "en": "File police theft report",
+                "ar": "تقديم بلاغ سرقة للشرطة"
+              },
+              "requires_consent": true
+            },
+            {
+              "id": "s2",
+              "tool": "registry.flag_vehicle",
+              "label": {
+                "en": "Flag vehicle in registry (block transfer, checkpoint alert)",
+                "ar": "تعميم المركبة في السجل (منع نقل الملكية وتنبيه نقاط التفتيش)"
+              },
+              "requires_consent": true,
+              "depends_on": [
+                "s1"
+              ]
+            },
+            {
+              "id": "s3",
+              "tool": "insurer.notify_claim",
+              "label": {
+                "en": "Notify insurer (optional)",
+                "ar": "إشعار شركة التأمين (اختياري)"
+              },
+              "requires_consent": true,
+              "optional": true,
+              "condition": "vehicle_insured",
+              "depends_on": [
+                "s1"
+              ]
+            }
+          ],
+          "target_state": {
+            "police.file_theft_report": "REGISTERED",
+            "registry.flag_vehicle": "FLAGGED"
+          }
+        }
+      ],
+      "file": "stolen_vehicle.json",
+      "action": {
+        "name": {
+          "en": "REPORT STOLEN VEHICLE",
+          "ar": "الإبلاغ عن سرقة مركبة"
+        },
+        "promise": {
+          "en": "HUMAIN can verify your vehicle, prepare the report and submit it through the authorised service workflow.",
+          "ar": "أتحقق من سيارتك، أجهّز البلاغ، وأقدّمه لك عبر مسار الخدمة المعتمد بعد موافقتك."
+        },
+        "flow": {
+          "en": "Verify → Prepare → Confirm → Submit",
+          "ar": "تحقق ← تجهيز ← تأكيد ← تقديم"
+        },
+        "confirm": {
+          "en": "Confirm & Submit Report",
+          "ar": "نعم، أكّد وأرسل البلاغ"
+        },
+        "capabilities": [
+          {
+            "en": "Verify my identity",
+            "ar": "التحقق من هويتي",
+            "on": "identity"
+          },
+          {
+            "en": "Verify my vehicle",
+            "ar": "التحقق من مركبتي",
+            "on": "vehicle"
+          },
+          {
+            "en": "Prepare my stolen vehicle report",
+            "ar": "تجهيز بلاغ السرقة",
+            "on": "prepare"
+          },
+          {
+            "en": "Ask for my confirmation",
+            "ar": "طلب موافقتي",
+            "on": "confirm"
+          },
+          {
+            "en": "Submit the report",
+            "ar": "تقديم البلاغ",
+            "on": "execute"
+          },
+          {
+            "en": "Create and track my case",
+            "ar": "إنشاء الحالة ومتابعتها",
+            "on": "track"
+          }
+        ],
+        "opener": {
+          "en": "Don't worry. Let me check your vehicle details and prepare the report for you.",
+          "ar": "ولا يهمك. خلني أتأكد من بيانات السيارة وأجهز لك البلاغ."
+        }
+      }
+    }
+  ]
+}

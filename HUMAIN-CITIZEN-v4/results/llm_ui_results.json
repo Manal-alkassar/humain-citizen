@@ -1,0 +1,77 @@
+{
+  "how": "python tests/ui_llm_check.py",
+  "n": 9,
+  "passed": 9,
+  "cases": [
+    {
+      "name": "LLM1 model understanding is used (rules alone miss slang 'jacked my ride') → workflow + details filled",
+      "pass": true,
+      "evidence": {
+        "reply": "Don't worry. Let me check your vehicle details and prepare the report for you.\n\nI've prepa",
+        "llm_calls": [
+          "understand",
+          "phrase"
+        ]
+      }
+    },
+    {
+      "name": "LLM2 model proposes a service that doesn't exist → ignored, built-in result used, journey continues",
+      "pass": true,
+      "evidence": {
+        "reply": "Don't worry. Let me check your vehicle details and prepare the report "
+      }
+    },
+    {
+      "name": "LLM3 model invents a vehicle not registered to the citizen → value rejected, citizen asked",
+      "pass": true,
+      "evidence": {
+        "reply": "Don't worry. Let me check your vehicle details and prepare the report for you.\n\n"
+      }
+    },
+    {
+      "name": "LLM4 model rewording drops facts (policy id, plates) → rejected, safe template shown",
+      "pass": true,
+      "evidence": {
+        "why": "phrasing rejected — template used (length changed too much (0.34×))Security Agentt+0m\nmode"
+      }
+    },
+    {
+      "name": "LLM5 valid natural rewording (all facts kept) → accepted and shown",
+      "pass": true,
+      "evidence": {
+        "reply": "نأسف لما حدث 🌿 ولا يهمك. خلني أتأكد من بيانات السيارة وأجهز "
+      }
+    },
+    {
+      "name": "LLM6 consent turn never goes to the model (approval comes only from the citizen)",
+      "pass": true,
+      "evidence": {
+        "understand_calls_before": 1,
+        "after_consent_turn": 1
+      }
+    },
+    {
+      "name": "LLM7 model unavailable (503) → built-in model used, journey works, no crash",
+      "pass": true,
+      "evidence": {
+        "reply": "Don't worry. Let me check your vehicle details and prepare t"
+      }
+    },
+    {
+      "name": "LLM8 injection attempt is blocked before reaching the model",
+      "pass": true,
+      "evidence": {
+        "llm_calls": 0
+      }
+    },
+    {
+      "name": "LLM9 AI settings: test connection + connect → header shows the live model",
+      "pass": true,
+      "evidence": {
+        "status": "✓ Connected to test-model (11 ms)",
+        "label": "AI: test-model ✓"
+      }
+    }
+  ],
+  "note": "Model endpoint simulated (this build environment cannot reach AI providers). The same code path is used with a real key; run a live check with the AI settings panel → Test connection."
+}

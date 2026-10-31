@@ -1,0 +1,200 @@
+{
+  "_meta": {
+    "file": "licence_replacement.json",
+    "notice": "ILLUSTRATIVE MOCK POLICIES for the hackathon prototype. They are NOT official Saudi government requirements. In production this layer is populated from authoritative, versioned service catalogues owned by each agency.",
+    "kb_version": "2026.10-hackathon"
+  },
+  "policies": [
+    {
+      "id": "POL-TRF-LIC-REPLACE",
+      "intent": "replace_lost_licence",
+      "title": {
+        "en": "Replace a lost driving licence",
+        "ar": "بدل فاقد رخصة القيادة"
+      },
+      "authority": "Traffic department (mock)",
+      "versions": [
+        {
+          "version": "3.0",
+          "effective": "2025-06-01",
+          "source_id": "KB/TRF/LIC-REPLACE/3.0",
+          "summary": "Holder of a valid licence (or expired < 1 year) may request a replacement. Illustrative fee applies. Delivery or pickup. If pickup is chosen, the earliest branch appointment is arranged.",
+          "risk": "medium",
+          "autonomy": "approved_execution",
+          "step_up_auth": false,
+          "fee_sar": 100,
+          "eligibility": [
+            "identity_verified",
+            "licence_valid_or_recent"
+          ],
+          "slots": [
+            {
+              "name": "loss_reason",
+              "type": "enum:lost|stolen|damaged",
+              "source": "user",
+              "required": true
+            },
+            {
+              "name": "delivery_method",
+              "type": "enum:pickup|delivery",
+              "source": "user",
+              "required": true
+            }
+          ],
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "payment.charge_fee",
+              "label": {
+                "en": "Pay replacement fee",
+                "ar": "سداد رسوم البدل"
+              },
+              "requires_consent": true
+            },
+            {
+              "id": "s2",
+              "tool": "traffic.issue_replacement",
+              "label": {
+                "en": "Issue replacement licence",
+                "ar": "إصدار رخصة بدل فاقد"
+              },
+              "requires_consent": true,
+              "depends_on": [
+                "s1"
+              ]
+            }
+          ],
+          "target_state": {
+            "traffic.issue_replacement": "ISSUED"
+          }
+        },
+        {
+          "version": "3.1",
+          "effective": "2026-11-01",
+          "source_id": "KB/TRF/LIC-REPLACE/3.1",
+          "summary": "As 3.0, plus: if the photo on file is older than 5 years the holder must confirm an updated photo before issuance. If pickup is chosen, the earliest branch appointment is arranged.",
+          "risk": "medium",
+          "autonomy": "approved_execution",
+          "step_up_auth": false,
+          "fee_sar": 100,
+          "eligibility": [
+            "identity_verified",
+            "licence_valid_or_recent"
+          ],
+          "slots": [
+            {
+              "name": "loss_reason",
+              "type": "enum:lost|stolen|damaged",
+              "source": "user",
+              "required": true
+            },
+            {
+              "name": "delivery_method",
+              "type": "enum:pickup|delivery",
+              "source": "user",
+              "required": true
+            },
+            {
+              "name": "photo_update",
+              "type": "confirm",
+              "source": "user",
+              "required": true,
+              "condition": "photo_older_than_5y"
+            }
+          ],
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "payment.charge_fee",
+              "label": {
+                "en": "Pay replacement fee",
+                "ar": "سداد رسوم البدل"
+              },
+              "requires_consent": true
+            },
+            {
+              "id": "s2",
+              "tool": "traffic.issue_replacement",
+              "label": {
+                "en": "Issue replacement licence",
+                "ar": "إصدار رخصة بدل فاقد"
+              },
+              "requires_consent": true,
+              "depends_on": [
+                "s1"
+              ]
+            }
+          ],
+          "target_state": {
+            "traffic.issue_replacement": "ISSUED"
+          }
+        }
+      ],
+      "file": "licence_replacement.json",
+      "action": {
+        "name": {
+          "en": "REPLACE LOST DRIVING LICENCE",
+          "ar": "استبدال رخصة القيادة المفقودة"
+        },
+        "promise": {
+          "en": "HUMAIN can check your licence status, determine the required process, arrange the next step and keep you updated.",
+          "ar": "أتحقق من حالة رخصتك، أحدد الإجراء المطلوب، أرتّب لك الخطوة الجاية، وأبلغك بكل تحديث."
+        },
+        "flow": {
+          "en": "Check → Prepare → Confirm → Track",
+          "ar": "تحقق ← تجهيز ← تأكيد ← متابعة"
+        },
+        "confirm": {
+          "en": "Confirm & Replace Licence",
+          "ar": "نعم، أكّد واستبدل الرخصة"
+        },
+        "capabilities": [
+          {
+            "en": "Check licence status",
+            "ar": "التحقق من حالة الرخصة",
+            "on": "licence_status"
+          },
+          {
+            "en": "Check requirements",
+            "ar": "التحقق من المتطلبات",
+            "on": "eligibility"
+          },
+          {
+            "en": "Determine required procedure",
+            "ar": "تحديد الإجراء المطلوب",
+            "on": "prepare"
+          },
+          {
+            "en": "Arrange appointment if required",
+            "ar": "حجز موعد عند الحاجة",
+            "on": "appointment"
+          },
+          {
+            "en": "Confirm with me",
+            "ar": "التأكيد معي",
+            "on": "confirm"
+          },
+          {
+            "en": "Execute the authorised action",
+            "ar": "تنفيذ الإجراء المعتمد",
+            "on": "execute"
+          },
+          {
+            "en": "Track the request",
+            "ar": "متابعة الطلب",
+            "on": "track"
+          },
+          {
+            "en": "Notify me",
+            "ar": "إشعاري",
+            "on": "notify"
+          }
+        ],
+        "opener": {
+          "en": "No problem. Let me check your licence status and arrange the replacement.",
+          "ar": "ولا يهمك. خلني أتأكد من حالة رخصتك وأرتّب لك البدل."
+        }
+      }
+    }
+  ]
+}

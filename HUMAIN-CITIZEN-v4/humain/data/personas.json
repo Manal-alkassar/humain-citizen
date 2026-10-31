@@ -1,0 +1,114 @@
+{
+  "_notice": "Fictional citizen records for the prototype. Not real people. In production this context comes from the authenticated identity layer, minimised per task.",
+  "personas": {
+    "omar": {
+      "name": "Omar Al-Kassar",
+      "name_ar": "عمر الكسار",
+      "national_id": "1012345678",
+      "phone": "+966500000001",
+      "identity_verified": true,
+      "vehicles": [
+        {
+          "plate": "XYZ 5678",
+          "make": "Toyota",
+          "model": "Camry",
+          "year": 2022,
+          "colour": "white",
+          "insured": true,
+          "insurer": "Demo Insurance Co.",
+          "model_ar": "كامري",
+          "make_ar": "تويوتا"
+        },
+        {
+          "plate": "ABC 1234",
+          "make": "Hyundai",
+          "model": "Elantra",
+          "year": 2019,
+          "colour": "grey",
+          "insured": false,
+          "model_ar": "النترا",
+          "make_ar": "هيونداي"
+        }
+      ],
+      "licence": {
+        "number": "L-99887766",
+        "status": "valid",
+        "expires": "2029-04-12",
+        "photo_year": 2019
+      },
+      "commercial_registrations": [
+        {
+          "cr": "1010101010",
+          "name": "Najd Coffee Roasters",
+          "active_employees": 0,
+          "outstanding_obligations": []
+        },
+        {
+          "cr": "1010202020",
+          "name": "Al-Kassar Logistics",
+          "active_employees": 3,
+          "outstanding_obligations": [
+            "annual zakat filing"
+          ]
+        }
+      ],
+      "employer": "Gulf Data Services"
+    },
+    "noura": {
+      "name": "Noura Al-Qahtani",
+      "name_ar": "نورة القحطاني",
+      "national_id": "1098765432",
+      "phone": "+966500000002",
+      "identity_verified": true,
+      "vehicles": [
+        {
+          "plate": "KSA 2468",
+          "make": "Kia",
+          "model": "Sportage",
+          "year": 2023,
+          "colour": "blue",
+          "insured": true,
+          "insurer": "Demo Insurance Co.",
+          "model_ar": "سبورتاج",
+          "make_ar": "كيا"
+        }
+      ],
+      "licence": {
+        "number": "L-11223344",
+        "status": "expired",
+        "expires": "2026-03-01",
+        "photo_year": 2023
+      },
+      "commercial_registrations": [],
+      "employer": "Riyadh Health Cluster"
+    },
+    "khalid": {
+      "name": "Khalid Al-Ghamdi",
+      "name_ar": "خالد الغامدي",
+      "national_id": "1055554444",
+      "phone": "+966500000003",
+      "identity_verified": false,
+      "vehicles": [
+        {
+          "plate": "JED 1357",
+          "make": "Nissan",
+          "model": "Patrol",
+          "year": 2021,
+          "colour": "black",
+          "insured": true,
+          "insurer": "Demo Insurance Co.",
+          "model_ar": "باترول",
+          "make_ar": "نيسان"
+        }
+      ],
+      "licence": {
+        "number": "L-55667788",
+        "status": "suspended",
+        "expires": "2027-08-30",
+        "photo_year": 2018
+      },
+      "commercial_registrations": [],
+      "employer": null
+    }
+  }
+}

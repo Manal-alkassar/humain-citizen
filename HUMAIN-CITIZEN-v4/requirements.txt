@@ -1,0 +1,2 @@
+# HUMAIN CITIZEN runs on the Python standard library only (Python 3.10+). Nothing to install to use the app.
+# The web app (web/index.html) runs entirely in the browser with no server or packages.

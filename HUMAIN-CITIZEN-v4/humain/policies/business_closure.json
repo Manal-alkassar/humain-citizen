@@ -1,0 +1,123 @@
+{
+  "_meta": {
+    "file": "business_closure.json",
+    "notice": "ILLUSTRATIVE MOCK POLICIES for the hackathon prototype. They are NOT official Saudi government requirements. In production this layer is populated from authoritative, versioned service catalogues owned by each agency.",
+    "kb_version": "2026.10-hackathon"
+  },
+  "policies": [
+    {
+      "id": "POL-MC-CR-CLOSE",
+      "intent": "close_business",
+      "title": {
+        "en": "Close a business (cancel commercial registration)",
+        "ar": "شطب السجل التجاري"
+      },
+      "authority": "Commerce registry (mock)",
+      "versions": [
+        {
+          "version": "1.4",
+          "effective": "2026-03-01",
+          "source_id": "KB/MC/CR-CLOSE/1.4",
+          "summary": "Owner may cancel a commercial registration when it has no active employees and no outstanding obligations.",
+          "risk": "high",
+          "autonomy": "approved_execution",
+          "step_up_auth": true,
+          "eligibility": [
+            "identity_verified",
+            "owns_selected_cr",
+            "cr_no_active_employees",
+            "cr_no_outstanding_obligations"
+          ],
+          "slots": [
+            {
+              "name": "cr",
+              "type": "owned_cr",
+              "source": "context_select",
+              "required": true
+            },
+            {
+              "name": "closure_reason",
+              "type": "free_text",
+              "source": "user",
+              "required": true
+            }
+          ],
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "commerce.cancel_cr",
+              "label": {
+                "en": "Request cancellation of commercial registration",
+                "ar": "طلب شطب السجل التجاري"
+              },
+              "requires_consent": true
+            }
+          ],
+          "target_state": {
+            "commerce.cancel_cr": "CANCELLED"
+          }
+        }
+      ],
+      "file": "business_closure.json",
+      "action": {
+        "name": {
+          "en": "CLOSE COMMERCIAL REGISTRATION",
+          "ar": "شطب السجل التجاري"
+        },
+        "promise": {
+          "en": "HUMAIN can verify your business authority, check the business status and submit the closure request through the authorised workflow.",
+          "ar": "أتحقق من صلاحيتك على المنشأة، أفحص حالتها، وأقدّم طلب الشطب عبر المسار المعتمد."
+        },
+        "flow": {
+          "en": "Verify → Prepare → Confirm → Submit",
+          "ar": "تحقق ← تجهيز ← تأكيد ← تقديم"
+        },
+        "confirm": {
+          "en": "Confirm & Close Registration",
+          "ar": "نعم، أكّد واشطب السجل"
+        },
+        "capabilities": [
+          {
+            "en": "Verify business authority",
+            "ar": "التحقق من صلاحية المنشأة",
+            "on": "business"
+          },
+          {
+            "en": "Check commercial registration",
+            "ar": "فحص السجل التجاري",
+            "on": "business"
+          },
+          {
+            "en": "Check eligibility / status",
+            "ar": "فحص الأهلية والحالة",
+            "on": "eligibility"
+          },
+          {
+            "en": "Prepare closure request",
+            "ar": "تجهيز طلب الشطب",
+            "on": "prepare"
+          },
+          {
+            "en": "Request confirmation",
+            "ar": "طلب التأكيد",
+            "on": "confirm"
+          },
+          {
+            "en": "Submit request",
+            "ar": "تقديم الطلب",
+            "on": "execute"
+          },
+          {
+            "en": "Track outcome",
+            "ar": "متابعة النتيجة",
+            "on": "track"
+          }
+        ],
+        "opener": {
+          "en": "Understood. Let me check your establishment and prepare the closure request.",
+          "ar": "تمام، فهمت عليك. خلني أتأكد من منشأتك وأجهز لك طلب الشطب."
+        }
+      }
+    }
+  ]
+}

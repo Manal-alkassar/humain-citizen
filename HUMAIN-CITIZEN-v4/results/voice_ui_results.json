@@ -1,0 +1,126 @@
+{
+  "how": "python tests/ui_voice_check.py",
+  "n": 12,
+  "passed": 12,
+  "cases": [
+    {
+      "name": "UI  welcome with action starters, no comparison boxes, progress, voice button, العربية | English",
+      "pass": true,
+      "evidence": {
+        "welcome": "HUMAIN CITIZEN\nDon't search for the service. Tell HUMAIN what you need.\n\nHUMAIN doesn't just tell you what to do. It orchestrates the journey for you.\n\nSpeak\nHUMAIN CAN DO THIS FOR YOU\nREPORT STOLEN VEHICLE\nVerify → Prepare → Confirm → Submit\nReport →\nREPLACE LOST LICENCE\nCheck → Prepare → Arrange → Track\nReplace →\nCLOSE COMMERCIAL REGISTRATION\nVerify → Check → Confirm → Submit\nClose →\nCREATE EMPLOYEE CONTRACT\nVerify → Prepare → Send → Track\nCreate →\nسيارتي انسرقت، وما أعرف وش الإجراء المطلوب.",
+        "service_cards_shown": 4,
+        "progress": [
+          "YOU DESCRIBE",
+          "HUMAIN UNDERSTANDS",
+          "PREPARES THE ACTION",
+          "VERIFIES EVERYTHING",
+          "YOU CONFIRM",
+          "EXECUTES",
+          "TRACKS THE OUTCOME"
+        ],
+        "selector": [
+          "العربية",
+          "English"
+        ]
+      }
+    },
+    {
+      "name": "V1  Arabic voice → recording shown → transcript shown before acting → Arabic workflow",
+      "pass": true,
+      "evidence": {
+        "recording_state": true,
+        "badge": "✓ العربية تم اكتشافها",
+        "requests_before_send": 0,
+        "channel": "voice",
+        "recogniser_lang": "ar-SA",
+        "pill": "اللغة المكتشفة: العربية"
+      }
+    },
+    {
+      "name": "V2  English voice → English detected → stolen-vehicle workflow",
+      "pass": true,
+      "evidence": {
+        "badge": "✓ English detected",
+        "reply": "Don't worry. Let me check your vehicle details and prepare the report "
+      }
+    },
+    {
+      "name": "V3  code-switching voice understood, no workflow failure",
+      "pass": true,
+      "evidence": {
+        "badge": "✓ English detected (mixed)",
+        "reply": "Don't worry. Let me check your vehicle details and prepare the report "
+      }
+    },
+    {
+      "name": "V4  noisy recording → 'couldn't understand', Try again / Type instead, no request sent",
+      "pass": true,
+      "evidence": {
+        "error": "I couldn't clearly understand the recording. Please try again.",
+        "buttons": [
+          "Try again",
+          "Type instead"
+        ],
+        "requests_sent": 0
+      }
+    },
+    {
+      "name": "V4b empty recording → not sent",
+      "pass": true,
+      "evidence": {
+        "error": "I didn't hear anything. Nothing was sent.",
+        "requests_sent": 0
+      }
+    },
+    {
+      "name": "V4c speech-to-text failure → clear error, 'Type instead' returns to keyboard, no crash",
+      "pass": true,
+      "evidence": {
+        "error": "Speech-to-text failed. You can try again or type instead.",
+        "focus_after_type_instead": "input"
+      }
+    },
+    {
+      "name": "V4d unclear/unsupported language → asked to repeat in Arabic/English, not sent",
+      "pass": true,
+      "evidence": {
+        "error": "I can only understand Arabic or English. Please repeat in one of them, or switch the listening language."
+      }
+    },
+    {
+      "name": "V5  wrong transcription → citizen edits → agent receives corrected text",
+      "pass": true,
+      "evidence": {
+        "sent_text": "my car was stolen",
+        "channel": "voice"
+      }
+    },
+    {
+      "name": "L6  start Arabic → switch to English: labels change, state kept, workflow continues",
+      "pass": true,
+      "evidence": {
+        "send_label_before": "إرسال",
+        "send_label_after": "Send",
+        "switch_msg": "Switched to English. Your case and progress are unchanged.\n\n",
+        "next_step": "Great, I have everything I need.\n\nI've prepared yo"
+      }
+    },
+    {
+      "name": "L7  start English → switch to Arabic: state kept, workflow continues, RTL layout",
+      "pass": true,
+      "evidence": {
+        "switch_msg": "تم التحويل إلى العربية. حالتك وتقدّمك كما هي بدون ",
+        "next_step": "موقع: العليا\n\nأرسله؟",
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "TTS 🔊 Listen available on agent replies and does not break the workflow",
+      "pass": true,
+      "evidence": {
+        "listen_buttons": 3
+      }
+    }
+  ],
+  "note": "Speech recogniser simulated in-browser to test the interface deterministically; live-microphone accuracy is covered by the manual checklist in docs/VOICE_MANUAL_TESTS.md. Screenshots: results/voice_ui/."
+}

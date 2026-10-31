@@ -1,0 +1,320 @@
+{
+  "_meta": {
+    "file": "employee_contract_management.json",
+    "notice": "ILLUSTRATIVE MOCK POLICIES for the hackathon prototype. They are NOT official Saudi government requirements. In production this layer is populated from authoritative, versioned service catalogues owned by each agency.",
+    "kb_version": "2026.10-hackathon"
+  },
+  "policies": [
+    {
+      "id": "POL-HR-HIRE",
+      "intent": "hire_employee",
+      "title": {
+        "en": "Create & manage employee contract",
+        "ar": "إنشاء عقد موظف وإدارته"
+      },
+      "authority": "Labour contracts platform (mock)",
+      "versions": [
+        {
+          "version": "1.1",
+          "effective": "2026-02-01",
+          "source_id": "KB/HR/CONTRACT/1.1",
+          "summary": "Employer creates an employment contract; it is sent to the employee for approval; the employee's decision is recorded and the contract becomes active.",
+          "risk": "medium",
+          "autonomy": "approved_execution",
+          "step_up_auth": false,
+          "eligibility": [
+            "identity_verified",
+            "owns_any_cr"
+          ],
+          "slots": [
+            {
+              "name": "employee",
+              "type": "free_text",
+              "source": "user",
+              "required": true
+            },
+            {
+              "name": "job_title",
+              "type": "free_text",
+              "source": "user",
+              "required": true
+            },
+            {
+              "name": "monthly_salary",
+              "type": "money",
+              "source": "user",
+              "required": true
+            }
+          ],
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "hr.create_contract",
+              "label": {
+                "en": "Create the contract and send it to the employee for approval",
+                "ar": "إنشاء العقد وإرساله للموظف للموافقة"
+              },
+              "requires_consent": true
+            }
+          ],
+          "target_state": {
+            "hr.create_contract": "ACTIVE"
+          }
+        }
+      ],
+      "file": "employee_contract_management.json",
+      "action": {
+        "name": {
+          "en": "CREATE & MANAGE EMPLOYEE CONTRACT",
+          "ar": "إنشاء عقد موظف وإدارته"
+        },
+        "promise": {
+          "en": "HUMAIN can verify the establishment and employee, prepare the contract and send it through the authorised workflow.",
+          "ar": "أتحقق من المنشأة والموظف، أجهّز العقد، وأرسله عبر المسار المعتمد."
+        },
+        "flow": {
+          "en": "Verify → Prepare → Confirm → Track",
+          "ar": "تحقق ← تجهيز ← تأكيد ← متابعة"
+        },
+        "confirm": {
+          "en": "Confirm & Create Contract",
+          "ar": "نعم، أكّد وأنشئ العقد"
+        },
+        "capabilities": [
+          {
+            "en": "Verify establishment",
+            "ar": "التحقق من المنشأة",
+            "on": "business"
+          },
+          {
+            "en": "Verify employee",
+            "ar": "التحقق من الموظف",
+            "on": "employee"
+          },
+          {
+            "en": "Check existing contract",
+            "ar": "التحقق من وجود عقد قائم",
+            "on": "existing_contract"
+          },
+          {
+            "en": "Prepare contract",
+            "ar": "تجهيز العقد",
+            "on": "prepare"
+          },
+          {
+            "en": "Send for approval",
+            "ar": "الإرسال للموافقة",
+            "on": "execute"
+          },
+          {
+            "en": "Record employee decision",
+            "ar": "تسجيل قرار الموظف",
+            "on": "decision"
+          },
+          {
+            "en": "Track contract status",
+            "ar": "متابعة حالة العقد",
+            "on": "track"
+          }
+        ],
+        "opener": {
+          "en": "Sure. Let me verify the establishment and the employee, then prepare the contract.",
+          "ar": "أبشر. خلني أتأكد من المنشأة والموظف وأجهز لك العقد."
+        }
+      }
+    },
+    {
+      "id": "POL-HR-TERMINATE",
+      "intent": "end_employee_contract",
+      "title": {
+        "en": "End an employee's contract",
+        "ar": "إنهاء عقد موظف"
+      },
+      "authority": "Labour platform (mock)",
+      "versions": [
+        {
+          "version": "1.2",
+          "effective": "2026-02-01",
+          "source_id": "KB/HR/TERMINATE/1.2",
+          "summary": "Contract termination has legal consequences for the worker. The agent collects facts and routes the case to a human labour officer; it never terminates autonomously.",
+          "risk": "critical",
+          "autonomy": "human_review",
+          "step_up_auth": true,
+          "eligibility": [
+            "identity_verified",
+            "owns_any_cr"
+          ],
+          "slots": [
+            {
+              "name": "employee",
+              "type": "free_text",
+              "source": "user",
+              "required": true
+            },
+            {
+              "name": "termination_reason",
+              "type": "free_text",
+              "source": "user",
+              "required": true
+            }
+          ],
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "hr.route_to_officer",
+              "label": {
+                "en": "Route case to human labour officer",
+                "ar": "إحالة الحالة إلى موظف مختص"
+              },
+              "requires_consent": true
+            }
+          ],
+          "target_state": {
+            "hr.route_to_officer": "ASSIGNED"
+          }
+        }
+      ],
+      "file": "employee_contract_management.json",
+      "action": {
+        "name": {
+          "en": "END EMPLOYEE CONTRACT (OFFICER REVIEW)",
+          "ar": "إنهاء عقد موظف (مراجعة موظف مختص)"
+        },
+        "promise": {
+          "en": "HUMAIN can collect the facts, verify your establishment and route the case to a labour officer. It never ends a contract on its own.",
+          "ar": "هيومن يجمع المعلومات ويتحقق من منشأتك ويحيل الحالة إلى موظف مختص، ولا ينهي أي عقد تلقائياً."
+        },
+        "flow": {
+          "en": "Collect → Verify → Confirm → Route to officer",
+          "ar": "جمع ← تحقق ← تأكيد ← إحالة"
+        },
+        "confirm": {
+          "en": "Confirm & Route to Officer",
+          "ar": "نعم، أكّد وأحِل للموظف"
+        },
+        "capabilities": [
+          {
+            "en": "Verify my identity",
+            "ar": "التحقق من هويتي",
+            "on": "identity"
+          },
+          {
+            "en": "Collect the facts",
+            "ar": "جمع المعلومات",
+            "on": "prepare"
+          },
+          {
+            "en": "Ask for my confirmation",
+            "ar": "طلب موافقتي",
+            "on": "confirm"
+          },
+          {
+            "en": "Route to a human officer",
+            "ar": "الإحالة إلى موظف مختص",
+            "on": "execute"
+          },
+          {
+            "en": "Track the review",
+            "ar": "متابعة المراجعة",
+            "on": "track"
+          }
+        ],
+        "opener": {
+          "en": "Understood. This one needs a human officer, so I'll prepare everything and route it to them.",
+          "ar": "تمام، فهمت عليك. هذا الإجراء يحتاج موظف مختص، فبجهّز كل شيء وأحيله له."
+        }
+      }
+    },
+    {
+      "id": "POL-HR-RESIGN",
+      "intent": "leave_job",
+      "title": {
+        "en": "Leave my job (resignation)",
+        "ar": "الاستقالة من العمل"
+      },
+      "authority": "Labour platform (mock)",
+      "versions": [
+        {
+          "version": "1.1",
+          "effective": "2026-02-01",
+          "source_id": "KB/HR/RESIGN/1.1",
+          "summary": "Worker submits resignation with the notice period stated in the contract. Agent drafts the notice; worker submits.",
+          "risk": "medium",
+          "autonomy": "assisted",
+          "step_up_auth": false,
+          "eligibility": [
+            "identity_verified",
+            "has_employer"
+          ],
+          "slots": [
+            {
+              "name": "last_working_day",
+              "type": "time_expr",
+              "source": "user",
+              "required": true
+            }
+          ],
+          "steps": [
+            {
+              "id": "s1",
+              "tool": "hr.draft_resignation",
+              "label": {
+                "en": "Prepare resignation notice draft",
+                "ar": "إعداد مسودة إشعار الاستقالة"
+              },
+              "requires_consent": true
+            }
+          ],
+          "target_state": {
+            "hr.draft_resignation": "DRAFT_READY"
+          }
+        }
+      ],
+      "file": "employee_contract_management.json",
+      "action": {
+        "name": {
+          "en": "PREPARE RESIGNATION NOTICE",
+          "ar": "تجهيز إشعار الاستقالة"
+        },
+        "promise": {
+          "en": "HUMAIN can prepare your resignation notice with the right details, ready for you to submit.",
+          "ar": "هيومن يجهّز إشعار استقالتك بالتفاصيل الصحيحة جاهزاً لتقديمه."
+        },
+        "flow": {
+          "en": "Verify → Prepare → Confirm → Draft ready",
+          "ar": "تحقق ← تجهيز ← تأكيد ← مسودة جاهزة"
+        },
+        "confirm": {
+          "en": "Confirm & Prepare Notice",
+          "ar": "نعم، أكّد وجهّز الإشعار"
+        },
+        "capabilities": [
+          {
+            "en": "Verify my identity",
+            "ar": "التحقق من هويتي",
+            "on": "identity"
+          },
+          {
+            "en": "Prepare the notice",
+            "ar": "تجهيز الإشعار",
+            "on": "prepare"
+          },
+          {
+            "en": "Ask for my confirmation",
+            "ar": "طلب موافقتي",
+            "on": "confirm"
+          },
+          {
+            "en": "Create the draft",
+            "ar": "إنشاء المسودة",
+            "on": "execute"
+          }
+        ],
+        "opener": {
+          "en": "Sure. I'll prepare your resignation notice with the right details.",
+          "ar": "أبشر، بجهّز لك إشعار الاستقالة بالتفاصيل الصحيحة."
+        }
+      }
+    }
+  ]
+}
